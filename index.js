@@ -35,23 +35,46 @@ class Projectile {
     ctx.fillStyle = this.color;
     ctx.fill();
   }
+
+  update() {
+    this.draw();
+    this.x = this.x + this.velocity.x;
+    this.y = this.y + this.velocity.y;
+  }
 }
 
 const player = new Player(canvas.width / 2, canvas.height / 2, 30, "blue");
-player.draw();
+
+const projectiles = [];
+
+function animate() {
+  requestAnimationFrame(animate);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  player.draw();
+  projectiles.forEach((projectile) => {
+    projectile.update();
+  });
+}
 
 window.addEventListener("click", (event) => {
-  const projectile = new Projectile(
-    event.clientX,
-    event.clientY,
-    5,
-    "black",
-    null
+  const angle = Math.atan2(
+    event.clientY - canvas.height / 2,
+    event.clientX - canvas.width / 2
   );
-  projectile.draw();
+
+  const velocity = {
+    x: Math.cos(angle),
+    y: Math.sin(angle),
+  };
+
+  projectiles.push(
+    new Projectile(canvas.width / 2, canvas.height / 2, 5, "black", velocity)
+  );
 });
 
-// Dodać strzelanie
+animate();
+
+// Dodać strzelanie CHECK
 // Dodać meteory
 // Dodać hit meteorów
 // Dodać scoreboard
