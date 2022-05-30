@@ -109,8 +109,20 @@ function animate() {
     projectile.update();
   });
 
-  enemies.forEach((enemy) => {
+  enemies.forEach((enemy, enemyIndex) => {
     enemy.update();
+
+    projectiles.forEach((projectile, projectileIndex) => {
+      const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
+
+      if (dist - enemy.radius - projectile.radius < 1) {
+        // Dodałem Timeouta, zeby usunac efekt migania przy usuwaniu obiektu z tablicy
+        setTimeout(() => {
+          enemies.splice(enemyIndex, 1);
+          projectiles.splice(projectileIndex, 1);
+        }, 0);
+      }
+    });
   });
 }
 
@@ -135,6 +147,6 @@ spawnEnemy();
 
 // Dodać strzelanie CHECK
 // Dodać meteory CHECK
-// Dodać hit meteorów
+// Dodać hit meteorów CHECK
 // Dodać hit playera
 // Dodać scoreboard
