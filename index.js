@@ -66,7 +66,12 @@ class Enemy {
   }
 }
 
-const player = new Player(canvas.width / 2, canvas.height / 2, 30, "blue");
+const player = new Player(
+  canvas.width / 2,
+  canvas.height / 2,
+  25,
+  "transparent"
+);
 const projectiles = [];
 const enemies = [];
 
@@ -85,7 +90,8 @@ function spawnEnemy() {
       y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius;
     }
 
-    const color = "green";
+    // Kolor meteorów
+    const color = `hsl(360, 0%, ${(Math.floor(Math.random() * 7) + 2) * 10}%)`;
 
     const angle = Math.atan2(canvas.height / 2 - y, canvas.width / 2 - x);
 
@@ -103,9 +109,17 @@ let animationId;
 function animate() {
   animationId = requestAnimationFrame(animate);
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "rgba(0, 0 , 0, 0.1)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   player.draw();
+
+  // Wyrenderowanie ziemi
+  const img = new Image();
+  img.src = "./earth.png";
+  img.onload = () => {
+    ctx.drawImage(img, canvas.width / 2 - 25, canvas.height / 2 - 25);
+  };
 
   projectiles.forEach((projectile, index) => {
     projectile.update();
@@ -154,12 +168,12 @@ window.addEventListener("click", (event) => {
   );
 
   const velocity = {
-    x: Math.cos(angle),
-    y: Math.sin(angle),
+    x: Math.cos(angle) * 5,
+    y: Math.sin(angle) * 5,
   };
 
   projectiles.push(
-    new Projectile(canvas.width / 2, canvas.height / 2, 5, "black", velocity)
+    new Projectile(canvas.width / 2, canvas.height / 2, 5, "white", velocity)
   );
 });
 
