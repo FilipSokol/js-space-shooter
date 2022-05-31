@@ -66,6 +66,34 @@ class Enemy {
   }
 }
 
+class Particle {
+  constructor(x, y, radius, color, velocity) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.color = color;
+    this.velocity = velocity;
+    this.alpha = 1;
+  }
+
+  draw() {
+    ctx.save();
+    ctx.globalAlpha = 0.1;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+    ctx.restore();
+  }
+
+  update() {
+    this.draw();
+    this.x = this.x + this.velocity.x;
+    this.y = this.y + this.velocity.y;
+    this.alpha -= 0.01;
+  }
+}
+
 const player = new Player(
   canvas.width / 2,
   canvas.height / 2,
@@ -74,6 +102,7 @@ const player = new Player(
 );
 const projectiles = [];
 const enemies = [];
+const particles = [];
 
 function spawnEnemy() {
   setInterval(() => {
@@ -113,6 +142,13 @@ function animate() {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   player.draw();
+  particles.forEach((particle, index) => {
+    if (particle.alpha <= 0) {
+      particles.splice(index, 1);
+    } else {
+      particle.update();
+    }
+  });
 
   // Wyrenderowanie ziemi
   const img = new Image();
@@ -151,17 +187,39 @@ function animate() {
       const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
 
       if (dist - enemy.radius - projectile.radius < 1) {
-        // Dodałem Timeouta, zeby usunac efekt migania przy usuwaniu obiektu z tablicy
-        setTimeout(() => {
-          enemies.splice(enemyIndex, 1);
-          projectiles.splice(projectileIndex, 1);
-        }, 0);
+        for (let i = 0; i < enemy.radius * 2; i++) {
+          particles.push(
+            new Particle(
+              projectile.x,
+              projectile.y,
+              Math.random() * 2,
+              `hsl(3, 74%, ${(Math.floor(Math.random() * 6) + 2) * 10}%)`,
+              {
+                x: (Math.random() - 0.5) * (Math.floor(Math.random() * 2) + 1),
+                y: (Math.random() - 0.5) * (Math.floor(Math.random() * 2) + 1),
+              }
+            )
+          );
+        }
+
+        if (enemy.radius - 10 > 10) {
+          enemy.radius -= 10;
+          setTimeout(() => {
+            projectiles.splice(projectileIndex, 1);
+          }, 0);
+        } else {
+          // Dodałem Timeouta, zeby usunac efekt migania przy usuwaniu obiektu z tablicy
+          setTimeout(() => {
+            enemies.splice(enemyIndex, 1);
+            projectiles.splice(projectileIndex, 1);
+          }, 0);
+        }
       }
     });
   });
 }
 
-window.addEventListener("click", (event) => {
+addEventListener("click", (event) => {
   const angle = Math.atan2(
     event.clientY - canvas.height / 2,
     event.clientX - canvas.width / 2
