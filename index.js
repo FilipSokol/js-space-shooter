@@ -107,8 +107,21 @@ function animate() {
 
   player.draw();
 
-  projectiles.forEach((projectile) => {
+  projectiles.forEach((projectile, index) => {
     projectile.update();
+
+    // Usuwanie po tym jak wyleca za krawedzie ekranu
+    if (
+      projectile.x + projectile.radius < 0 ||
+      projectile.x - projectile.radius > canvas.width ||
+      projectile.y + projectile.radius < 0 ||
+      projectile.y - projectile.radius > canvas.height
+    ) {
+      // Dodałem Timeouta, zeby usunac efekt migania przy usuwaniu obiektu z tablicy
+      setTimeout(() => {
+        projectiles.splice(index, 1);
+      }, 0);
+    }
   });
 
   enemies.forEach((enemy, enemyIndex) => {
@@ -156,5 +169,5 @@ spawnEnemy();
 // Dodać strzelanie CHECK
 // Dodać meteory CHECK
 // Dodać hit meteorów CHECK
-// Dodać hit playera
+// Dodać hit playera CHECK
 // Dodać scoreboard
