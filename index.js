@@ -4,7 +4,10 @@ const ctx = canvas.getContext("2d");
 canvas.height = innerHeight;
 canvas.width = innerWidth;
 
-const score = document.querySelector("#score");
+const smallScore = document.querySelector("#score");
+const bigScore = document.querySelector("#ui-score");
+const startGameBtn = document.querySelector("#ui-button");
+const modalEl = document.querySelector("#modalEl");
 
 class Player {
   constructor(x, y, radius, color) {
@@ -96,15 +99,20 @@ class Particle {
   }
 }
 
-const player = new Player(
-  canvas.width / 2,
-  canvas.height / 2,
-  25,
-  "transparent"
-);
-const projectiles = [];
-const enemies = [];
-const particles = [];
+let player = new Player(canvas.width / 2, canvas.height / 2, 25, "transparent");
+let projectiles = [];
+let enemies = [];
+let particles = [];
+
+function init() {
+  player = new Player(canvas.width / 2, canvas.height / 2, 25, "transparent");
+  projectiles = [];
+  enemies = [];
+  particles = [];
+  scoreCounter = 0;
+  smallScore.innerHTML = scoreCounter;
+  bigScore.innerHTML = scoreCounter;
+}
 
 function spawnEnemy() {
   setInterval(() => {
@@ -184,6 +192,8 @@ function animate() {
 
     if (dist - enemy.radius - player.radius < 1) {
       cancelAnimationFrame(animationId);
+      modalEl.style.display = "flex";
+      bigScore.innerHTML = scoreCounter;
     }
 
     projectiles.forEach((projectile, projectileIndex) => {
@@ -207,7 +217,7 @@ function animate() {
 
         if (enemy.radius - 10 > 10) {
           scoreCounter += 100;
-          score.innerHTML = scoreCounter;
+          smallScore.innerHTML = scoreCounter;
 
           enemy.radius -= 10;
           setTimeout(() => {
@@ -215,7 +225,7 @@ function animate() {
           }, 0);
         } else {
           scoreCounter += 250;
-          score.innerHTML = scoreCounter;
+          smallScore.innerHTML = scoreCounter;
           // Dodałem Timeouta, zeby usunac efekt migania przy usuwaniu obiektu z tablicy
           setTimeout(() => {
             enemies.splice(enemyIndex, 1);
@@ -243,5 +253,9 @@ addEventListener("click", (event) => {
   );
 });
 
-animate();
-spawnEnemy();
+startGameBtn.addEventListener("click", (event) => {
+  init();
+  animate();
+  spawnEnemy();
+  modalEl.style.display = "none";
+});

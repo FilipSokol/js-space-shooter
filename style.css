@@ -1,5 +1,7 @@
 body {
   margin: 0;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background-color: black;
 }
 
 .score-box {
@@ -7,6 +9,47 @@ body {
   position: fixed;
   margin: 1rem 0 0 1rem;
   font-size: 1.3rem;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
   color: white;
+}
+
+.ui-main-box {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+}
+
+.ui-box {
+  background-color: white;
+  max-width: 40rem;
+  width: 100%;
+  padding: 2rem;
+}
+
+#ui-score {
+  font-size: 2.5rem;
+  font-weight: 600;
+  line-height: 0;
+}
+
+#ui-points {
+  margin: 2.5rem 0 2rem 0;
+  font-size: 1.5rem;
+  color: rgb(165, 165, 165);
+  line-height: 0;
+}
+
+#ui-button {
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 3rem;
+  color: white;
+  background-color: rgb(31, 129, 249);
+  padding: 1rem;
+  width: 100%;
 }
