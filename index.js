@@ -4,6 +4,8 @@ const ctx = canvas.getContext("2d");
 canvas.height = innerHeight;
 canvas.width = innerWidth;
 
+const score = document.querySelector("#score");
+
 class Player {
   constructor(x, y, radius, color) {
     this.x = x;
@@ -134,6 +136,7 @@ function spawnEnemy() {
 }
 
 let animationId;
+let scoreCounter = 0;
 
 function animate() {
   animationId = requestAnimationFrame(animate);
@@ -203,11 +206,16 @@ function animate() {
         }
 
         if (enemy.radius - 10 > 10) {
+          scoreCounter += 100;
+          score.innerHTML = scoreCounter;
+
           enemy.radius -= 10;
           setTimeout(() => {
             projectiles.splice(projectileIndex, 1);
           }, 0);
         } else {
+          scoreCounter += 250;
+          score.innerHTML = scoreCounter;
           // Dodałem Timeouta, zeby usunac efekt migania przy usuwaniu obiektu z tablicy
           setTimeout(() => {
             enemies.splice(enemyIndex, 1);
@@ -237,9 +245,3 @@ addEventListener("click", (event) => {
 
 animate();
 spawnEnemy();
-
-// Dodać strzelanie CHECK
-// Dodać meteory CHECK
-// Dodać hit meteorów CHECK
-// Dodać hit playera CHECK
-// Dodać scoreboard
