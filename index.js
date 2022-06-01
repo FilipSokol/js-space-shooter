@@ -1,8 +1,8 @@
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 
-canvas.height = innerHeight;
-canvas.width = innerWidth;
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
 
 const smallScore = document.querySelector("#score");
 const bigScore = document.querySelector("#ui-score");
@@ -129,7 +129,6 @@ function spawnEnemy() {
       y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius;
     }
 
-    // Kolor meteorów
     const color = `hsl(360, 0%, ${(Math.floor(Math.random() * 7) + 2) * 10}%)`;
 
     const angle = Math.atan2(canvas.height / 2 - y, canvas.width / 2 - x);
@@ -161,7 +160,6 @@ function animate() {
     }
   });
 
-  // Wyrenderowanie ziemi
   const img = new Image();
   img.src = "./earth.png";
   img.onload = () => {
@@ -171,7 +169,6 @@ function animate() {
   projectiles.forEach((projectile, index) => {
     projectile.update();
 
-    // Usuwanie po tym jak wyleca za krawedzie ekranu
     if (
       projectile.x + projectile.radius < 0 ||
       projectile.x - projectile.radius > canvas.width ||
@@ -226,7 +223,7 @@ function animate() {
         } else {
           scoreCounter += 250;
           smallScore.innerHTML = scoreCounter;
-          // Dodałem Timeouta, zeby usunac efekt migania przy usuwaniu obiektu z tablicy
+
           setTimeout(() => {
             enemies.splice(enemyIndex, 1);
             projectiles.splice(projectileIndex, 1);

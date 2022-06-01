@@ -1,7 +1,13 @@
 body {
   margin: 0;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: "Russo One", sans-serif;
   background-color: black;
+  height: 100vh;
+  width: 100vw;
+}
+
+canvas {
+  display: block;
 }
 
 .score-box {
@@ -46,6 +52,7 @@ body {
 
 #ui-button {
   font-size: 1.5rem;
+  font-family: "Russo One", sans-serif;
   border: none;
   border-radius: 3rem;
   color: white;
